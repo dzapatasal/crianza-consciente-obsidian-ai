@@ -1,0 +1,15 @@
+# Entorno virtual
+venv/
+env/
+.venv/
+
+# Variables de entorno (Seguridad)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Archivos de sistema
+.DS_Store
+dependencias_actuales.txt

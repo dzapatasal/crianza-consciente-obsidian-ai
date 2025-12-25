@@ -1,0 +1,57 @@
+.
+├── 00_INBOX
+│   └── Audio_Captures
+│       └── processed
+│           └── Recording 20251224130822.m4a
+├── 10_MOCS
+│   ├── 10.01_MOC_Crianza Consciente.md
+│   ├── 10.02_MOC_Desarrollo Infantil.md
+│   ├── 10.03_MOC_Disciplina y Límites.md
+│   ├── 10.04_MOC_Conexión y Vínculo.md
+│   └── 10.05_MOC_Registros Diarios por Meses.md
+├── 20_PILAR_Desarrollo
+│   ├── 21_Hitos y Etapas
+│   │   ├── 21.01_Hitos_18-24 Meses.md
+│   │   ├── 21.02_Hitos_2-3 años.md
+│   │   └── 21.03_Hitos_Lenguaje.md
+│   ├── 22_Neurociencia
+│   │   ├── 22.01_Desarrollo Prefrontal.md
+│   │   └── 22.02_Regulacion Emocional.md
+│   └── 23_Salud y Nutrición
+│       └── 23.01_Sueño y rutinas.md
+├── 30_PILAR_Disciplina
+│   ├── 31_Estrategias de Guía
+│   │   ├── 31.01_Consecuencias Lógicas.md
+│   │   └── 31.02_Límites Firmes y Amables.md
+│   ├── 32_Manejo de Crisis
+│   │   ├── 32.01_Berrinches (Desregulación).md
+│   │   └── 32.02_Agresión Temprana (Morder, Golpear).md
+│   └── 33_Autonomía
+│       └── 33.01_Ofrecer Opciones Limitadas.md
+├── 40_PILAR_Conexión
+│   ├── 41_Comunicación
+│   │   ├── 41.01_Escucha Activa.md
+│   │   └── 41.02_Lenguaje que Nombra Emociones.md
+│   ├── 42_Vínculo y Juego
+│   │   ├── 42.01_Tiempo Especial Diario.md
+│   │   └── 42.02_Juego Sensorial y Motor.md
+│   └── 43_Co-Parenting (Rol de Ambos Padres)
+│       ├── 43.01_Acuerdos Clave.md
+│       └── 43.02_Roles y Transiciones (Día-Noche).md
+├── 50_REFERENCIAS
+│   ├── 51_Fuentes (Libros, Articulos)
+│   │   ├── 51.01_Cerebro del Niño (Siegel).md
+│   │   └── 51.02_Julia Bordolla (Notas Clave).md
+│   └── 52_Citas relevantes.md
+├── 60_REGISTROS_DIARIOS
+│   ├── 2025
+│   │   └── 12_December
+│   │       ├── 2025-12-12.md
+│   │       ├── 2025-12-14.md
+│   │       ├── 2025-12-15.md
+│   │       ├── 2025-12-16.md
+│   │       ├── 2025-12-17.md
+│   │       ├── 2025-12-23.md
+│   │       └── 2025-12-24.md
+│   └── 60.01_Plantilla_Registro Diario.md
+└── Rutina de llegada a la reunión.md
