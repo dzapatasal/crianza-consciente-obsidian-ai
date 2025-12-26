@@ -112,13 +112,21 @@ class AudioHandler(FileSystemEventHandler):
         ruta_archivo = os.path.join(ruta_carpeta, f"{hoy.strftime('%Y-%m-%d')}.md")
         
         os.makedirs(ruta_carpeta, exist_ok=True)
+
+        # Leer el contenido actual para contar notas
+        numero_nota = 1
+        if os.path.exists(ruta_archivo):
+            with open(ruta_archivo, "r", encoding="utf-8") as f:
+                texto_actual = f.read()
+                # Contamos cuántas veces aparece el encabezado de nota de voz
+                numero_nota = texto_actual.count("# 🎙️ Nota de Voz") + 1
         
         modo = "a" if os.path.exists(ruta_archivo) else "w"
         with open(ruta_archivo, modo, encoding="utf-8") as f:
             if modo == "w":
                 f.write(f"---\ntags:\n  - Crianza/Diario\n---\n# Registro {hoy}\n")
-            # CAMBIO SOLICITADO AQUÍ:
-            f.write(f"\n\n# 🎙️ Nota de Voz ({duracion})\n")
+            # Incluye el numero de nota
+            f.write(f"\n\n# 🎙️ Nota de Voz #{numero_nota} ({duracion})\n")
             f.write(content)
         print(f"📝 Nota actualizada con duración: {duracion}")
 
