@@ -1,0 +1,3 @@
+nombre: Bruno
+madre: Mónica
+fecha_nacimiento: 2024-03-31

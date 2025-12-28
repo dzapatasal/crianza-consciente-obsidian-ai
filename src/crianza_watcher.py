@@ -6,6 +6,7 @@ import google.generativeai as genai
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from dotenv import load_dotenv
+from datetime import date
 
 load_dotenv()
 
@@ -22,6 +23,29 @@ def obtener_duracion(file_path):
         segundos = float(subprocess.check_output(comando).decode('utf-8').strip())
         return f"{int(segundos // 60)}m {int(segundos % 60)}s"
     except: return "Desconocida"
+
+def obtener_perfil_bruno():
+    """Lee el nombre, madre y fecha de nacimiento desde config/perfil_bruno.txt"""
+    ruta_perfil = os.path.join(os.path.dirname(__file__), "..", "config", "perfil_bruno.txt")
+    perfil = {"nombre": "Bruno", "madre": "Mónica", "edad": "Edad no disponible"}
+    try:
+        with open(ruta_perfil, "r", encoding="utf-8") as f:
+            lineas = f.readlines()
+            datos = {l.split(":")[0].strip(): l.split(":")[1].strip() for l in lineas}
+            
+            # Cálculo de edad
+            nacimiento = datetime.datetime.strptime(datos["fecha_nacimiento"], "%Y-%m-%d").date()
+            hoy = date.today()
+            años = hoy.year - nacimiento.year - ((hoy.month, hoy.day) < (nacimiento.month, nacimiento.day))
+            meses = (hoy.month - nacimiento.month) % 12
+            if hoy.day < nacimiento.day: meses -= 1
+            
+            perfil["nombre"] = datos.get("nombre", "Bruno")
+            perfil["madre"] = datos.get("madre", "Mónica")
+            perfil["edad"] = f"{años} años, {meses} meses"
+    except:
+        pass
+    return perfil
 
 def leer_prompt_externo():
     ruta_prompt = os.path.join(os.path.dirname(__file__), "..", "config", "prompt_crianza.txt")
@@ -75,15 +99,22 @@ class BatchAudioHandler(FileSystemEventHandler):
 
             instrucciones = leer_prompt_externo()
             notas_baul = obtener_conocimientos_disponibles(VAULT_PATH)
+            perfil = obtener_perfil_bruno()
             
             # Nuevo Prompt para LÍNEA DE TIEMPO y BATCH 
             prompt_final = f"""
             {instrucciones}
 
+            CONTEXTO DEL SUJETO:
+            - Hijo: {perfil['nombre']}
+            - Madre: {perfil['madre']}
+            - Edad Exacta Hoy: {perfil['edad']}
+
             INSTRUCCIONES DE LOTE:
             He subido {len(audios)} audios. Tu tarea es:
             1. Crear una LÍNEA DE TIEMPO cronológica resumiendo cada evento brevemente.
-            2. Realizar un ANÁLISIS GLOBAL detectando patrones conductuales en el conjunto.
+            2. Realizar un ANÁLISIS GLOBAL considerando que {perfil['nombre']} tiene {perfil['edad']}.
+               Relaciona su comportamiento con los hitos de desarrollo esperados para esta edad y los acuerdos con {perfil['madre']}.
             3. Vincular con mi baúl usando [[Archivo|Nombre]].
 
             METADATOS DE ARCHIVOS:
@@ -94,7 +125,7 @@ class BatchAudioHandler(FileSystemEventHandler):
             """
 
             response = model.generate_content([prompt_final] + uploaded_files)
-            self.save_to_obsidian(response.text, len(audios))
+            self.save_to_obsidian(response.text, len(audios), perfil["edad"])
             
             # Limpiar: Mover audios a processed y borrar trigger
             processed_dir = os.path.join(os.path.dirname(MONITOR_DIR), "processed")
@@ -108,7 +139,7 @@ class BatchAudioHandler(FileSystemEventHandler):
         except Exception as e:
             print(f"❌ Error en batch: {e}")
 
-    def save_to_obsidian(self, content, total_audios):
+    def save_to_obsidian(self, content, total_audios, edad):
         hoy = datetime.date.today()
         ruta_carpeta = os.path.join(VAULT_PATH, "60_REGISTROS_DIARIOS", str(hoy.year), f"{hoy.month:02}_{hoy.strftime('%B')}")
         ruta_archivo = os.path.join(ruta_carpeta, f"{hoy.strftime('%Y-%m-%d')}.md")
@@ -118,6 +149,7 @@ class BatchAudioHandler(FileSystemEventHandler):
         with open(ruta_archivo, modo, encoding="utf-8") as f:
             if modo == "w":
                 f.write(f"---\ntags:\n  - Crianza/Diario\n---\n# Registro {hoy}\n")
+                f.write(f"**Edad de Bruno:** {edad}\n")
             f.write(f"\n\n## 🗓️ Resumen de Jornada ({total_audios} interacciones)\n")
             f.write(content)
 
